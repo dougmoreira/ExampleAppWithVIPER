@@ -30,11 +30,13 @@ final class GetCurrentTemperature: GetCurrentTemperatureUseCase {
             decode.keyDecodingStrategy = .convertFromSnakeCase
             
             do {
-                let decodedData = try decode.decode(CurrentWeather.self, from: data)
-                completion(.success(decodedData))
+                let decodedData = try decode.decode(Forecast.self, from: data)
+                completion(.success(decodedData.currentWeather))
             } catch {
                 completion(.failure(.invalidDecodedData))
             }
         }
+        
+        dataTask.resume()
     }
 }

@@ -21,7 +21,7 @@ final class ForecastInteractor: ForecastBusinessLogic {
                 if let temperature = currentTemperature?.temperature {
                     self?.presenter.presentCurrentForecast(with: .init(temperature: temperature))
                 }
-            case .failure(let failure):
+            case .failure:
                 debugPrint("error") // to do
             }
         }
