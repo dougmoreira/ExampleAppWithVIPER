@@ -6,6 +6,6 @@ final class ForecastPresenter: ForecastPresentationLogic {
     weak var viewController: ForecastDisplayLogic?
     
     func presentCurrentForecast(with response: CurrentForecastModel.Response) {
-        viewController?.displayCurrentForecast(viewModel: .init())
+        viewController?.displayCurrentForecast(viewModel: .init(temperature: response.temperature))
     }
 }

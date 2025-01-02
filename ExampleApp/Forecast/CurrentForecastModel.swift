@@ -1,7 +1,11 @@
 public enum CurrentForecastModel {
     public struct Request { }
-    public struct Response { }
-    public struct ViewModel { }
+    public struct Response {
+        let temperature: Double
+    }
+    public struct ViewModel {
+        let temperature: Double
+    }
 }
 
 public struct Forecast: Decodable {
@@ -13,5 +17,9 @@ public struct CurrentWeather: Decodable {
 }
 
 public enum ForecastError: Error {
-    case genericErrorCode(String)
+    case genericError
+    case invalidURL
+    case invalidStatusCode
+    case invalidData
+    case invalidDecodedData
 }
