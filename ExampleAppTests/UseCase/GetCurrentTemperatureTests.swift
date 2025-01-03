@@ -48,5 +48,6 @@ final class GetCurrentTemperatureTests: XCTestCase {
         
         waitForExpectations(timeout: 1.0)
     }
+    
 
 }
