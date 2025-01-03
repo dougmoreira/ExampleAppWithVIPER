@@ -30,6 +30,8 @@
 		74F220572D26DA7300EE7BB6 /* GetCurrentTemperatureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F220562D26DA7300EE7BB6 /* GetCurrentTemperatureUseCase.swift */; };
 		74F220592D26DC0600EE7BB6 /* GetCurrentTemperatureSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F220582D26DC0600EE7BB6 /* GetCurrentTemperatureSpy.swift */; };
 		74F2205E2D26E33500EE7BB6 /* GetCurrentTemperatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F2205D2D26E33500EE7BB6 /* GetCurrentTemperatureTests.swift */; };
+		74F220612D2807B500EE7BB6 /* URLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F220602D2807B500EE7BB6 /* URLSession.swift */; };
+		74F220642D2809ED00EE7BB6 /* URLSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F220632D2809ED00EE7BB6 /* URLSessionMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,8 @@
 		74F220562D26DA7300EE7BB6 /* GetCurrentTemperatureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentTemperatureUseCase.swift; sourceTree = "<group>"; };
 		74F220582D26DC0600EE7BB6 /* GetCurrentTemperatureSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentTemperatureSpy.swift; sourceTree = "<group>"; };
 		74F2205D2D26E33500EE7BB6 /* GetCurrentTemperatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentTemperatureTests.swift; sourceTree = "<group>"; };
+		74F220602D2807B500EE7BB6 /* URLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSession.swift; sourceTree = "<group>"; };
+		74F220632D2809ED00EE7BB6 /* URLSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 		74D7285F2D22E22500BBDE6F = {
 			isa = PBXGroup;
 			children = (
+				74F2205F2D2807AA00EE7BB6 /* Extensions */,
 				74F220512D26D6EC00EE7BB6 /* ExampleApp.xctestplan */,
 				74D7286A2D22E22500BBDE6F /* ExampleApp */,
 				74D728812D22E22500BBDE6F /* ExampleAppTests */,
@@ -144,6 +149,7 @@
 		74D728812D22E22500BBDE6F /* ExampleAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				74F220622D2809DD00EE7BB6 /* Mock */,
 				74F2205A2D26E2F200EE7BB6 /* UseCase */,
 				74D728A62D22E56D00BBDE6F /* Spies */,
 				74D728B52D22EB3C00BBDE6F /* ForecastInteractorTests.swift */,
@@ -201,6 +207,22 @@
 				74F2205D2D26E33500EE7BB6 /* GetCurrentTemperatureTests.swift */,
 			);
 			path = UseCase;
+			sourceTree = "<group>";
+		};
+		74F2205F2D2807AA00EE7BB6 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				74F220602D2807B500EE7BB6 /* URLSession.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		74F220622D2809DD00EE7BB6 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				74F220632D2809ED00EE7BB6 /* URLSessionMock.swift */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +358,7 @@
 			files = (
 				74D728702D22E22500BBDE6F /* ViewController.swift in Sources */,
 				74F220572D26DA7300EE7BB6 /* GetCurrentTemperatureUseCase.swift in Sources */,
+				74F220612D2807B500EE7BB6 /* URLSession.swift in Sources */,
 				74D7289D2D22E23A00BBDE6F /* ForecastInteractor.swift in Sources */,
 				74D728A32D22E45B00BBDE6F /* ForecastPresenter.swift in Sources */,
 				74D728B42D22E87400BBDE6F /* ForecastConfigurator.swift in Sources */,
@@ -354,6 +377,7 @@
 				74D728A82D22E57C00BBDE6F /* ForecastPresenterSpy.swift in Sources */,
 				74F2204E2D26D06800EE7BB6 /* ForecastPresenterTests.swift in Sources */,
 				74D728B62D22EB3C00BBDE6F /* ForecastInteractorTests.swift in Sources */,
+				74F220642D2809ED00EE7BB6 /* URLSessionMock.swift in Sources */,
 				74F220592D26DC0600EE7BB6 /* GetCurrentTemperatureSpy.swift in Sources */,
 				74D7289F2D22E28B00BBDE6F /* ForecastInteractorSpy.swift in Sources */,
 				74D728AC2D22E71300BBDE6F /* ForecastRouterSpy.swift in Sources */,

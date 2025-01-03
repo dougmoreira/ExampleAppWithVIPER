@@ -7,7 +7,9 @@ public protocol ForecastConfiguratorProtocol {
 final class ForecastConfigurator: ForecastConfiguratorProtocol {
     func resolveViewController() -> UIViewController {
         let presenter = ForecastPresenter()
-        let getCurrentTemperture = GetCurrentTemperature()
+        let getCurrentTemperture = GetCurrentTemperature(
+            network: URLSession.shared
+        )
         let interactor = ForecastInteractor(
             presenter: presenter,
             getCurrentTemperature: getCurrentTemperture

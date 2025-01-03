@@ -5,13 +5,19 @@ public protocol GetCurrentTemperatureUseCase {
 }
 
 final class GetCurrentTemperature: GetCurrentTemperatureUseCase {
+    private let network: URLSessionProtocol
+    
+    init(network: URLSessionProtocol) {
+        self.network = network
+    }
+    
     func getTemperature(completion: @escaping (Result<CurrentWeather?, ForecastError>) -> Void) {
         guard let url = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=-19.9208&longitude=-43.9378&hourly=temperature_2m&current_weather=true&forecast_days=1") else {
             completion(.failure(.invalidURL))
             return
         }
         
-        let dataTask = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
+        let dataTask = network.dataTask(with: URLRequest(url: url)) { data, response, error in
             if error != nil {
                 completion(.failure(.genericError))
             }
