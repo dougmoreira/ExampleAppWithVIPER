@@ -1,23 +1,22 @@
-//
-//  ForecastInteractorTests.swift
-//  ExampleAppTests
-//
-//  Created by Douglas Moreira on 30/12/24.
-//
-
 import XCTest
 @testable import ExampleApp
 
 final class ForecastInteractorTests: XCTestCase {
     private let presenterSpy = ForecastPresenterSpy()
+    private let getCurrentTemperatureSpy = GetCurrentTemperatureSpy()
     private lazy var sut = ForecastInteractor(
-        presenter: presenterSpy
+        presenter: presenterSpy, 
+        getCurrentTemperature: getCurrentTemperatureSpy
     )
     
-    func test_didLoad() {
-        sut.didLoad(request: .init())
+    func test_fetchCurrentTemperature_whenCompletionIsSuccess_shouldCallPresenterWithCorrectData() {
+        let temperature: Double = 27
+        
+        getCurrentTemperatureSpy.completionToBeReturned = .success(.init(temperature: temperature))
+        sut.fetchCurrentTemperature(request: .init())
         
         XCTAssertEqual(presenterSpy.presentCurrentForecastCallCount, 1)
+        XCTAssertEqual(presenterSpy.presentCurrentForecastResponsePassed?.temperature, temperature)
     }
 
 }

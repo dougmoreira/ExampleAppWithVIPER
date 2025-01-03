@@ -2,6 +2,7 @@ import UIKit
 
 public protocol ForecastDisplayLogic: AnyObject {
     func displayCurrentForecast(viewModel: CurrentForecastModel.ViewModel)
+    func isLoading(viewModel: ViewState.ViewModel)
 }
 
 final class ForecastViewController: UIViewController {
@@ -15,13 +16,35 @@ final class ForecastViewController: UIViewController {
         return label
     }()
     
+    private let cityName: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .largeTitle)
+        label.textAlignment = .center
+        label.textColor = .white
+        label.text = "Belo Horizonte, Brazil"
+        return label
+    }()
+    
     private lazy var mainStackView: UIStackView = {
-        let stackView = UIStackView()
+        let stackView = UIStackView(arrangedSubviews: [
+            loadingIndicator,
+            temperatureLabel,
+            cityName
+        ])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        stackView.addArrangedSubview(temperatureLabel)
-        stackView.distribution = .equalCentering
+        stackView.distribution = .equalSpacing
+        stackView.alignment = .center
+        stackView.spacing = 12
         return stackView
+    }()
+    
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.color = .white
+        view.isHidden = true
+        view.startAnimating()
+        return view
     }()
     
     init(interactor: ForecastBusinessLogic) {
@@ -42,7 +65,7 @@ final class ForecastViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        interactor.didLoad(request: .init())
+        interactor.fetchCurrentTemperature(request: .init())
     }
 }
 
@@ -53,18 +76,22 @@ extension ForecastViewController {
     
     private func constrainSubviews() {
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: view.topAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            mainStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            mainStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            mainStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }
 
 extension ForecastViewController: ForecastDisplayLogic {
+    func isLoading(viewModel: ViewState.ViewModel) {
+        DispatchQueue.main.async {
+            self.loadingIndicator.isHidden = viewModel.isLoading ? false : true
+        }
+    }
+    
     func displayCurrentForecast(viewModel: CurrentForecastModel.ViewModel) {
         DispatchQueue.main.async {
-            self.temperatureLabel.text = "\(viewModel.temperature)ºC"
+            self.temperatureLabel.text = "\(viewModel.temperature) ºC"
         }
     }
 }

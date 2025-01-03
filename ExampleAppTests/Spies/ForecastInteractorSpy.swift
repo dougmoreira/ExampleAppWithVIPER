@@ -1,11 +1,11 @@
 import ExampleApp
 
 final class ForecastInteractorSpy: ForecastBusinessLogic {
-    public private(set) var didLoadCallCount: Int = 0
-    public private(set) var didLoadRequestPassed: CurrentForecastModel.Request?
+    public private(set) var fetchCurrentTemperatureCallCount: Int = 0
+    public private(set) var fetchCurrentTemperatureRequestPassed: CurrentForecastModel.Request?
 
-    func didLoad(request: CurrentForecastModel.Request) {
-        didLoadCallCount += 1
-        didLoadRequestPassed = request
+    func fetchCurrentTemperature(request: CurrentForecastModel.Request) {
+        fetchCurrentTemperatureCallCount += 1
+        fetchCurrentTemperatureRequestPassed = request
     }
 }

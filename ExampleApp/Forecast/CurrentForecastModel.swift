@@ -8,6 +8,16 @@ public enum CurrentForecastModel {
     }
 }
 
+public enum ViewState {
+    public struct Request { }
+    public struct Response {
+        let isLoading: Bool
+    }
+    public struct ViewModel {
+        let isLoading: Bool
+    }
+}
+
 public struct Forecast: Decodable {
     public let currentWeather: CurrentWeather
 }

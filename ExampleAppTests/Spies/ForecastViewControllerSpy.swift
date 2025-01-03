@@ -8,4 +8,12 @@ final class ForecastViewControllerSpy: ForecastDisplayLogic {
         displayCurrentForecastCallCount += 1
         displayCurrentForecastViewModelPassed = viewModel
     }
+    
+    public private(set) var isLoadingCallCount: Int = 0
+    public private(set) var isLoadingViewModelPassed: ViewState.ViewModel?
+    
+    func isLoading(viewModel: ViewState.ViewModel) {
+        isLoadingCallCount += 1
+        isLoadingViewModelPassed = viewModel
+    }
 }

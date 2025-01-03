@@ -17,10 +17,12 @@ final class ForecastPresenterTests: XCTestCase {
         return presenter
     }()
     
-    func test_() {
-        sut.presentCurrentForecast(with: .init())
+    func test_presentCurrentForecast_shouldCallViewControllerWithCorrectParams() {
+        let temperature: Double = 27
+        sut.presentCurrentForecast(response: .init(temperature: temperature))
         
         XCTAssertEqual(viewControllerSpy.displayCurrentForecastCallCount, 1)
+        XCTAssertEqual(viewControllerSpy.displayCurrentForecastViewModelPassed?.temperature, temperature)
     }
     
 }

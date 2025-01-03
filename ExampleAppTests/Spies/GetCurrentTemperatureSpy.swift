@@ -2,7 +2,7 @@ import ExampleApp
 
 final class GetCurrentTemperatureSpy: GetCurrentTemperatureUseCase {
     private(set) var getTemperatureCallCount: Int = 0
-    private(set) var completionToBeReturned: Result<CurrentWeather?, ForecastError>?
+    var completionToBeReturned: Result<CurrentWeather?, ForecastError>?
     
     func getTemperature(completion: @escaping (Result<CurrentWeather?, ForecastError>) -> Void) {
         getTemperatureCallCount += 1
