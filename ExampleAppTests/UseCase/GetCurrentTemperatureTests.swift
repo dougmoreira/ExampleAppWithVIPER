@@ -4,8 +4,10 @@ import XCTest
 
 final class GetCurrentTemperatureTests: XCTestCase {
     private let networkMock = URLSessionMock()
+    private let urlString = "https://api.open-meteo.com/v1/forecast?latitude=-19.9208&longitude=-43.9378&hourly=temperature_2m&current_weather=true&forecast_days=1"
+    
     private lazy var sut = GetCurrentTemperature(
-        network: networkMock
+        network: networkMock, urlString: urlString
     )
     
     func test_getTemperature_whenRequestIsSuccess_shouldCompletionWithCorrectResponse() {
@@ -135,6 +137,19 @@ final class GetCurrentTemperatureTests: XCTestCase {
                 XCTFail("should completion with invalid data error type")
             case .failure(let failure):
                 XCTAssertEqual(failure, .invalidData)
+            }
+        }
+    }
+    
+    func test_getTemperature_withIncorrectURL_shouldCompletionWithCorrectErrorType() {
+        let sut = GetCurrentTemperature(network: networkMock, urlString: nil)
+        
+        sut.getTemperature { result in
+            switch result {
+            case .success(let success):
+                XCTFail("should completion with invalid url error type")
+            case .failure(let failure):
+                XCTAssertEqual(failure, .invalidURL)
             }
         }
     }
