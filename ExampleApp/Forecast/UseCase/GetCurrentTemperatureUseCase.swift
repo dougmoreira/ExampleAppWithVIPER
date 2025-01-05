@@ -18,7 +18,7 @@ final class GetCurrentTemperature: GetCurrentTemperatureUseCase {
         }
         
         let dataTask = network.dataTask(with: URLRequest(url: url)) { data, response, error in
-            if error != nil {
+            if let _ = error {
                 completion(.failure(.genericError))
             }
             

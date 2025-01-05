@@ -3,7 +3,7 @@ import XCTest
 @testable import ExampleApp
 
 final class GetCurrentTemperatureTests: XCTestCase {
-    let networkMock = URLSessionMock()
+    private let networkMock = URLSessionMock()
     private lazy var sut = GetCurrentTemperature(
         network: networkMock
     )
@@ -49,5 +49,93 @@ final class GetCurrentTemperatureTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
-
+    func test_getTemperature_whenFailureWithIncorrectStatusCode_shouldCompletionWithCorrecError() {
+        let temperature: Double = 25.0
+        let jsonString = """
+        {
+            "current_weather": {
+                "temperature": \(temperature)
+            }
+        }
+        """
+        
+        let data = jsonString.data(using: .utf8)
+        
+        networkMock.data = data
+        networkMock.response = HTTPURLResponse(
+            url: URL(string: "example")!,
+            statusCode: 300,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        
+        sut.getTemperature { result in
+            switch result {
+            case .success(let success):
+                XCTFail("Should completion with incorrect status code error")
+            case .failure(let failure):
+                XCTAssertEqual(failure, ForecastError.invalidStatusCode)
+            }
+        }
+    }
+    
+    func test_getTemperature_whenFailureWithInvalidDecodedData_shouldCompletionWithCorrectErrorType() {
+        let temperature: Double = 25.0
+        let jsonString = """
+        {
+            "current_weather": {
+                "temperature_": \(temperature)
+            }
+        }
+        """
+        
+        let invalidData = jsonString.data(using: .utf8)
+        
+        networkMock.data = invalidData
+        networkMock.response = HTTPURLResponse(
+            url: URL(string: "example")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        
+        sut.getTemperature { result in
+            switch result {
+            case .success:
+                XCTFail("should completion with invalid data error type")
+            case .failure(let failure):
+                XCTAssertEqual(failure, .invalidDecodedData)
+            }
+        }
+    }
+    
+    func test_getTemperature_whenFailureWithInvalidData_shouldCompletionWithCorrectErrorType() {
+        let temperature: Double = 25.0
+        let jsonString = """
+        {
+            "current_weather": {
+                "temperature": \(temperature)
+            }
+        }
+        """
+        
+        let invalidData = jsonString.data(using: .symbol)
+        
+        networkMock.data = invalidData
+        networkMock.response = HTTPURLResponse(
+            url: URL(string: "example")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        
+        sut.getTemperature { result in
+            switch result {
+            case .success:
+                XCTFail("should completion with invalid data error type")
+            case .failure(let failure):
+                XCTAssertEqual(failure, .invalidData)
+            }
+        }
+    }
 }
