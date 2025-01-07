@@ -6,15 +6,13 @@ public protocol GetCurrentTemperatureUseCase {
 
 final class GetCurrentTemperature: GetCurrentTemperatureUseCase {
     private let network: URLSessionProtocol
-    private let urlString: String?
     
-    init(network: URLSessionProtocol, urlString: String?) {
+    init(network: URLSessionProtocol) {
         self.network = network
-        self.urlString = urlString
     }
     
     func getTemperature(completion: @escaping (Result<CurrentWeather?, ForecastError>) -> Void) {
-        guard let urlString = urlString, let url = URL(string: urlString) else {
+        guard let url = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=-19.9208&longitude=-43.9378&hourly=temperature_2m&current_weather=true&forecast_days=1") else {
             completion(.failure(.invalidURL))
             return
         }
