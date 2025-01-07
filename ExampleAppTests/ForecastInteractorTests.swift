@@ -15,6 +15,7 @@ final class ForecastInteractorTests: XCTestCase {
         getCurrentTemperatureSpy.completionToBeReturned = .success(.init(temperature: temperature))
         sut.fetchCurrentTemperature(request: .init())
         
+        XCTAssertEqual(presenterSpy.presentStateCallCount, 2)
         XCTAssertEqual(presenterSpy.presentCurrentForecastCallCount, 1)
         XCTAssertEqual(presenterSpy.presentCurrentForecastResponsePassed?.temperature, temperature)
     }

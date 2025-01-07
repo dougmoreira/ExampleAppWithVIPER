@@ -2,7 +2,7 @@ import UIKit
 
 public protocol ForecastDisplayLogic: AnyObject {
     func displayCurrentForecast(viewModel: CurrentForecastModel.ViewModel)
-    func isLoading(viewModel: ViewState.ViewModel)
+    func displayState(viewModel: ViewState.ViewModel)
 }
 
 final class ForecastViewController: UIViewController {
@@ -14,6 +14,16 @@ final class ForecastViewController: UIViewController {
         label.textAlignment = .center
         label.textColor = .white
         return label
+    }()
+    
+    private lazy var tryAgainButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Failure. Try again", for: .normal)
+        button.isHidden = true
+        button.addTarget(self, action: #selector(didTapTryAgainButton), for: .touchUpInside)
+        button.backgroundColor = .systemPink
+        button.layer.cornerRadius = 8
+        return button
     }()
     
     private let cityName: UILabel = {
@@ -29,7 +39,8 @@ final class ForecastViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [
             loadingIndicator,
             temperatureLabel,
-            cityName
+            cityName,
+            tryAgainButton
         ])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -75,6 +86,18 @@ extension ForecastViewController {
     }
     
     private func constrainSubviews() {
+        constrainMainStackView()
+        constrainTryAgainButton()
+    }
+    
+    private func constrainTryAgainButton() {
+        NSLayoutConstraint.activate([
+            tryAgainButton.heightAnchor.constraint(equalToConstant: 40),
+            tryAgainButton.widthAnchor.constraint(equalToConstant: 200)
+        ])
+    }
+    
+    private func constrainMainStackView() {
         NSLayoutConstraint.activate([
             mainStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             mainStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -83,9 +106,10 @@ extension ForecastViewController {
 }
 
 extension ForecastViewController: ForecastDisplayLogic {
-    func isLoading(viewModel: ViewState.ViewModel) {
+    func displayState(viewModel: ViewState.ViewModel) {
         DispatchQueue.main.async {
             self.loadingIndicator.isHidden = viewModel.isLoading ? false : true
+            self.tryAgainButton.isHidden = viewModel.error == true ? false : true
         }
     }
     
@@ -93,5 +117,11 @@ extension ForecastViewController: ForecastDisplayLogic {
         DispatchQueue.main.async {
             self.temperatureLabel.text = "\(viewModel.temperature) ºC"
         }
+    }
+}
+
+extension ForecastViewController {
+    @objc func didTapTryAgainButton() {
+        interactor.fetchCurrentTemperature(request: .init())
     }
 }

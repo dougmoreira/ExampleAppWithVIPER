@@ -15,7 +15,7 @@ final class ForecastInteractor: ForecastBusinessLogic {
     }
     
     func fetchCurrentTemperature(request: CurrentForecastModel.Request) {
-        presenter.presentIsLoading(response: .init(isLoading: true))
+        presenter.presentState(response: .init(isLoading: true, error: nil))
         getCurrentTemperature.getTemperature { [weak self] result in
             switch result {
             case .success(let currentTemperature):
@@ -23,10 +23,20 @@ final class ForecastInteractor: ForecastBusinessLogic {
                     self?.presenter.presentCurrentForecast(
                         response: .init(temperature: temperature)
                     )
-                    self?.presenter.presentIsLoading(response: .init(isLoading: false))
+                    self?.presenter.presentState(
+                        response: .init(
+                            isLoading: false,
+                            error: nil
+                        )
+                    )
                 }
             case .failure:
-                debugPrint("error") // to do error state
+                self?.presenter.presentState(
+                    response: .init(
+                        isLoading: false,
+                        error: true
+                    )
+                )
             }
         }
     }

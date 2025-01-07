@@ -1,6 +1,6 @@
 public protocol ForecastPresentationLogic {
     func presentCurrentForecast(response: CurrentForecastModel.Response)
-    func presentIsLoading(response: ViewState.Response)
+    func presentState(response: ViewState.Response)
 }
 
 final class ForecastPresenter: ForecastPresentationLogic {
@@ -10,7 +10,12 @@ final class ForecastPresenter: ForecastPresentationLogic {
         viewController?.displayCurrentForecast(viewModel: .init(temperature: response.temperature))
     }
     
-    func presentIsLoading(response: ViewState.Response) {
-        viewController?.isLoading(viewModel: .init(isLoading: response.isLoading))
+    func presentState(response: ViewState.Response) {
+        viewController?.displayState(
+            viewModel: .init(
+                isLoading: response.isLoading,
+                error: response.error
+            )
+        )
     }
 }

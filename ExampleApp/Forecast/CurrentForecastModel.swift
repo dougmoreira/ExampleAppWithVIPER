@@ -12,9 +12,11 @@ public enum ViewState {
     public struct Request { }
     public struct Response {
         let isLoading: Bool
+        let error: Bool?
     }
     public struct ViewModel {
         let isLoading: Bool
+        let error: Bool?
     }
 }
 

@@ -73,7 +73,7 @@ final class GetCurrentTemperatureTests: XCTestCase {
         
         sut.getTemperature { result in
             switch result {
-            case .success(let success):
+            case .success:
                 XCTFail("Should completion with incorrect status code error")
             case .failure(let failure):
                 XCTAssertEqual(failure, ForecastError.invalidStatusCode)
@@ -146,7 +146,7 @@ final class GetCurrentTemperatureTests: XCTestCase {
         
         sut.getTemperature { result in
             switch result {
-            case .success(let success):
+            case .success:
                 XCTFail("should completion with invalid url error type")
             case .failure(let failure):
                 XCTAssertEqual(failure, .invalidURL)
