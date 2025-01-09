@@ -76,7 +76,7 @@ final class ForecastViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        interactor.fetchCurrentTemperature(request: .init())
+        interactor.fetchForecast()
     }
 }
 

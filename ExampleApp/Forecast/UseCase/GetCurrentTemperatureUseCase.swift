@@ -2,6 +2,7 @@ import Foundation
 
 public protocol GetCurrentTemperatureUseCase {
     func getTemperature(completion: @escaping (Result<CurrentWeather?, ForecastError>) -> Void)
+    func getForecast() async throws -> CurrentWeather?
 }
 
 final class GetCurrentTemperature: GetCurrentTemperatureUseCase {
@@ -44,5 +45,30 @@ final class GetCurrentTemperature: GetCurrentTemperatureUseCase {
         }
         
         dataTask.resume()
+    }
+    
+    func getForecast() async throws -> CurrentWeather? {
+        guard let url = URL(string: "") else {
+            throw ForecastError.invalidURL
+        }
+        
+        let request = URLRequest(url: url)
+        
+        do {
+            let (data, response) = try await network.data(for: request)
+            
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                throw ForecastError.invalidStatusCode
+            }
+            
+            let decode = JSONDecoder()
+            decode.keyDecodingStrategy = .convertFromSnakeCase
+            
+            let decodedData = try decode.decode(Forecast.self, from: data)
+            
+            return decodedData.currentWeather
+        } catch {
+            throw error
+        }
     }
 }

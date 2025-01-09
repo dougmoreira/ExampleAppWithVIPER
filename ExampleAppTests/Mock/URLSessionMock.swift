@@ -13,6 +13,14 @@ class URLSessionMock: URLSessionProtocol {
         
         return dataTask
     }
+    
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        guard let data = self.data, let response = self.response else {
+            throw error ?? ForecastError.genericError
+        }
+        
+        return (data, response)
+    }
 }
 
 class URLSessionDataTaskMock: URLSessionDataTask {

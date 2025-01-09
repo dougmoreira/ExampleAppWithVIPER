@@ -1,5 +1,6 @@
 public protocol ForecastBusinessLogic {
     func fetchCurrentTemperature(request: CurrentForecastModel.Request)
+    func fetchForecast()
 }
 
 final class ForecastInteractor: ForecastBusinessLogic {
@@ -37,6 +38,26 @@ final class ForecastInteractor: ForecastBusinessLogic {
                         error: true
                     )
                 )
+            }
+        }
+        
+    }
+    
+    func fetchForecast() {
+        self.presenter.presentState(response: .init(isLoading: true, error: nil))
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let response = try await self.getCurrentTemperature.getForecast()
+                if let temperature = response?.temperature {
+                    self.presenter.presentCurrentForecast(response: .init(temperature: temperature))
+                    self.presenter.presentState(response: .init(isLoading: false, error: nil))
+                } else {
+                    self.presenter.presentState(response: .init(isLoading: false, error: true))
+                }
+            } catch {
+                self.presenter.presentState(response: .init(isLoading: false, error: true))
             }
         }
     }

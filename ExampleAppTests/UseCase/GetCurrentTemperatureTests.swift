@@ -138,4 +138,80 @@ final class GetCurrentTemperatureTests: XCTestCase {
             }
         }
     }
+    
+    func test_getForecast_withCorrectResponse_shouldReturnCorrectTemperature() throws {
+        let temperature: Double = 25.0
+        let jsonString = """
+        {
+            "current_weather": {
+                "temperature": \(temperature)
+            }
+        }
+        """
+        
+        let validData = jsonString.data(using: .utf8)
+        let validResponse = HTTPURLResponse(
+            url: URL(string: "example")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        
+        networkMock.data = validData
+        networkMock.response = validResponse
+        
+        let expectation = self.expectation(description: "Waiting for response")
+        
+        Task {
+            do {
+                let response = try await sut.getForecast()
+                XCTAssertEqual(response?.temperature, temperature)
+            } catch {
+                XCTFail("Request got \(error) instead success")
+            }
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1.0)
+        
+    }
+    
+    func test_getForecast_withInvalidStatusCode_shouldReturnCorrectErrorType() throws {
+        let temperature: Double = 25.0
+        let jsonString = """
+        {
+            "current_weather": {
+                "temperature": \(temperature)
+            }
+        }
+        """
+        
+        let validData = jsonString.data(using: .utf8)
+        let validResponse = HTTPURLResponse(
+            url: URL(string: "example")!,
+            statusCode: 300,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        
+        networkMock.data = validData
+        networkMock.response = validResponse
+        
+        let expectation = self.expectation(description: "Waiting for response")
+        
+        Task {
+            do {
+                let _ = try await sut.getForecast()
+                XCTFail("Got success instead of invalid status code")
+            } catch {
+                XCTAssertEqual(error as? ForecastError, ForecastError.invalidStatusCode)
+            }
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1.0)
+        
+    }
 }
